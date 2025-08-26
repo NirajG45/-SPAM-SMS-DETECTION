@@ -5,185 +5,100 @@
   <title>Spam Detector</title>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fa;
-    }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fa; scroll-behavior: smooth; }
 
     /* Navbar */
     nav {
-      background: #000;
-      color: white;
-      border-bottom: 1px solid #333;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      background: #000; color: white; border-bottom: 1px solid #333;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 20px; position: sticky; top: 0; z-index: 1000;
     }
-
-    nav .logo {
-      display: flex;
-      align-items: center;
-      font-size: 20px;
-      font-weight: bold;
-      gap: 8px;
-    }
-
-    nav .logo svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-      gap: 25px;
-    }
-
-    nav ul li {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    nav ul li svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    nav ul li:hover {
-      color: #0ff;
-    }
-
-    .menu-btn {
-      display: none;
-      cursor: pointer;
-    }
-
-    .menu-btn svg {
-      width: 28px;
-      height: 28px;
-    }
-
+    nav .logo { display: flex; align-items: center; font-size: 20px; font-weight: bold; gap: 8px; }
+    nav ul { list-style: none; display: flex; margin: 0; padding: 0; gap: 25px; }
+    nav ul li a { color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    nav ul li a:hover { color: #0ff; }
+    .menu-btn { display: none; cursor: pointer; }
     @media (max-width: 768px) {
-      nav ul {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: #111;
-        flex-direction: column;
-        width: 200px;
-        padding: 15px;
-        border: 1px solid #333;
-        border-radius: 8px;
-      }
-
-      nav ul.show {
-        display: flex;
-      }
-
-      .menu-btn {
-        display: block;
-      }
+      nav ul { display: none; position: absolute; top: 60px; right: 20px; background: #111;
+               flex-direction: column; width: 200px; padding: 15px; border: 1px solid #333; border-radius: 8px; }
+      nav ul.show { display: flex; }
+      .menu-btn { display: block; }
     }
 
-    /* Main content */
+    /* Sections */
+    section { padding: 60px 20px; text-align: center; }
     .container {
-      width: 400px;
-      margin: 80px auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
-      text-align: center;
+      width: 400px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1); text-align: center;
     }
-
-    input[type="text"] {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+    input[type="text"], input[type="email"], textarea {
+      width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px;
     }
-
     button {
-      padding: 10px 20px;
-      background: #007bff;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px 20px; background: #007bff; border: none; color: white;
+      border-radius: 6px; cursor: pointer;
     }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    a {
-      display: block;
-      margin-top: 20px;
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
+    button:hover { background: #0056b3; }
+    .result { margin-top: 20px; font-size: 18px; font-weight: bold; }
+    .ham { color: green; }
+    .spam { color: red; }
   </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav>
-    <div class="logo">
-      <i data-lucide="shield-check"></i> Spam Detector
-    </div>
-
+    <div class="logo"><i data-lucide="shield-check"></i> Spam Detector</div>
     <ul id="menu">
-      <li><i data-lucide="home"></i> Home</li>
-      <li><i data-lucide="database"></i> Dataset</li>
-      <li><i data-lucide="info"></i> About</li>
-      <li><i data-lucide="mail"></i> Contact</li>
+      <li><a href="#home"><i data-lucide="home"></i> Home</a></li>
+      <li><a href="{{ url_for('dataset') }}"><i data-lucide="database"></i> Dataset</a></li>
+      <li><a href="#about"><i data-lucide="info"></i> About</a></li>
+      <li><a href="#contact"><i data-lucide="mail"></i> Contact</a></li>
     </ul>
-
-    <div class="menu-btn" onclick="toggleMenu()">
-      <i data-lucide="menu"></i>
-    </div>
+    <div class="menu-btn" onclick="toggleMenu()"><i data-lucide="menu"></i></div>
   </nav>
 
-  <!-- Main Spam Detector Form -->
+  <!-- Home Section -->
+  <section id="home">
+    <div class="container">
+      <h2>Spam Message Detector</h2>
+      <form method="POST">
+        <input type="text" name="message" placeholder="Enter your message..." value="{{ user_input }}" required>
+        <br>
+        <button type="submit">Check</button>
+      </form>
+      {% if prediction %}
+        <div class="result {% if 'Spam' in prediction %}spam{% else %}ham{% endif %}">{{ prediction }}</div>
+      {% endif %}
+      <a href="{{ url_for('dataset') }}">View Full Dataset Predictions</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2><i data-lucide="info"></i> About Spam Detector</h2>
+      <p>This Spam Detector project is built using Python, Flask, and Machine Learning.</p>
+      <p>It uses a Naive Bayes classifier trained on SMS Spam dataset to detect spam messages.</p>
+      <p>Created by <b>Subh</b> 💻</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
   <div class="container">
-    <h2>Spam Message Detector</h2>
-    <form method="POST">
-      <input type="text" name="message" placeholder="Enter your message..." value="{{ user_input }}" required>
-      <br>
-      <button type="submit">Check</button>
+    <h2><i data-lucide="mail"></i> Contact Us</h2>
+    <form method="POST" action="{{ url_for('contact') }}">
+      <input type="text" name="name" placeholder="Your Name" required><br>
+      <input type="email" name="email" placeholder="Your Email" required><br>
+      <textarea name="message" rows="4" placeholder="Your Message" required></textarea><br>
+      <button type="submit">Send</button>
     </form>
-    {% if prediction %}
-      <div class="result">{{ prediction }}</div>
-    {% endif %}
-    <a href="/dataset">View Full Dataset Predictions</a>
   </div>
+</section>
 
   <script>
     lucide.createIcons();
-    function toggleMenu() {
-      document.getElementById("menu").classList.toggle("show");
-    }
+    function toggleMenu() { document.getElementById("menu").classList.toggle("show"); }
   </script>
 </body>
 </html>
