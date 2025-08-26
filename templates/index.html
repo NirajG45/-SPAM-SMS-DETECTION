@@ -3,64 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <title>Spam Detector</title>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fa; scroll-behavior: smooth; }
+    body { 
+      margin: 0; font-family: "Segoe UI", Arial, sans-serif; 
+      background: linear-gradient(135deg, #000, #1a1a1a, #2e2e2e, #444); 
+      scroll-behavior: smooth; color: #eee;
+    }
 
     /* Navbar */
     nav {
-      background: #000; color: white; border-bottom: 1px solid #333;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 20px; position: sticky; top: 0; z-index: 1000;
+      background: #111; color: white; display: flex; justify-content: space-between; 
+      align-items: center; padding: 14px 25px; position: sticky; top: 0; z-index: 1000;
+      border-bottom: 1px solid #333;
     }
-    nav .logo { display: flex; align-items: center; font-size: 20px; font-weight: bold; gap: 8px; }
-    nav ul { list-style: none; display: flex; margin: 0; padding: 0; gap: 25px; }
-    nav ul li a { color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    nav .logo { display: flex; align-items: center; font-size: 22px; font-weight: bold; gap: 8px; }
+    nav ul { list-style: none; display: flex; margin: 0; padding: 0; gap: 30px; }
+    nav ul li a { color: white; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 16px; transition: 0.3s; }
     nav ul li a:hover { color: #0ff; }
     .menu-btn { display: none; cursor: pointer; }
+
     @media (max-width: 768px) {
-      nav ul { display: none; position: absolute; top: 60px; right: 20px; background: #111;
-               flex-direction: column; width: 200px; padding: 15px; border: 1px solid #333; border-radius: 8px; }
+      nav ul { display: none; position: absolute; top: 60px; right: 20px; background: #222;
+               flex-direction: column; width: 220px; padding: 15px; border-radius: 8px; }
       nav ul.show { display: flex; }
       .menu-btn { display: block; }
     }
 
     /* Sections */
-    section { padding: 60px 20px; text-align: center; }
+    section { padding: 70px 20px; text-align: center; }
     .container {
-      width: 400px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1); text-align: center;
+      max-width: 650px; margin: auto; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 12px;
+      box-shadow: 0px 6px 20px rgba(0,0,0,0.6); transition: 0.3s; backdrop-filter: blur(6px);
     }
+    .container:hover { transform: translateY(-4px); }
+
+    h2 { margin-bottom: 20px; color: #fff; }
+    p { font-size: 16px; line-height: 1.6; color: #ddd; }
+
     input[type="text"], input[type="email"], textarea {
-      width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px;
+      width: 90%; padding: 12px; margin: 12px 0; border: 1px solid #444; border-radius: 6px;
+      font-size: 15px; transition: 0.3s; outline: none; background: #000; color: #fff;
     }
+    input:focus, textarea:focus { border-color: #0ff; box-shadow: 0 0 8px rgba(0,255,255,0.5); }
+
     button {
-      padding: 10px 20px; background: #007bff; border: none; color: white;
-      border-radius: 6px; cursor: pointer;
+      padding: 12px 24px; background: #0ff; border: none; color: #000;
+      border-radius: 6px; cursor: pointer; font-size: 16px; transition: 0.3s;
     }
-    button:hover { background: #0056b3; }
+    button:hover { background: #0cc; }
+
     .result { margin-top: 20px; font-size: 18px; font-weight: bold; }
-    .ham { color: green; }
-    .spam { color: red; }
+    .ham { color: #0f0; }
+    .spam { color: #f33; }
+
+    /* Stats Counter */
+    .stats { margin-top: 30px; }
+    .stat-box {
+      display: inline-block; padding: 20px 30px; margin: 10px;
+      background: rgba(0,0,0,0.6); border-radius: 10px;
+      color: #0ff; font-size: 28px; font-weight: bold;
+      box-shadow: 0 0 15px rgba(0,255,255,0.2);
+    }
+    .stat-box i { margin-right: 10px; color: #0ff; }
+
+    /* About section */
+    .features { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; text-align: left; }
+    .features div { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #ddd; }
+
+    /* Footer */
+    footer {
+      text-align: center; background: #111; color: #aaa;
+      padding: 15px; margin-top: 40px; font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav>
-    <div class="logo"><i data-lucide="shield-check"></i> Spam Detector</div>
+    <div class="logo"><i class="fas fa-shield-alt"></i> Spam Detector</div>
     <ul id="menu">
-      <li><a href="#home"><i data-lucide="home"></i> Home</a></li>
-      <li><a href="{{ url_for('dataset') }}"><i data-lucide="database"></i> Dataset</a></li>
-      <li><a href="#about"><i data-lucide="info"></i> About</a></li>
-      <li><a href="#contact"><i data-lucide="mail"></i> Contact</a></li>
+      <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="{{ url_for('dataset') }}"><i class="fas fa-database"></i> Dataset</a></li>
+      <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
     </ul>
-    <div class="menu-btn" onclick="toggleMenu()"><i data-lucide="menu"></i></div>
+    <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
   </nav>
 
   <!-- Home Section -->
   <section id="home">
     <div class="container">
-      <h2>Spam Message Detector</h2>
+      <h2><i class="fas fa-envelope-open-text"></i> Spam Message Detector</h2>
       <form method="POST">
         <input type="text" name="message" placeholder="Enter your message..." value="{{ user_input }}" required>
         <br>
@@ -69,36 +104,84 @@
       {% if prediction %}
         <div class="result {% if 'Spam' in prediction %}spam{% else %}ham{% endif %}">{{ prediction }}</div>
       {% endif %}
-      <a href="{{ url_for('dataset') }}">View Full Dataset Predictions</a>
+
+      <!-- Stats Counter -->
+      <div class="stats">
+        <div class="stat-box">
+          <i class="fas fa-bug"></i> 
+          <span id="spamCount" data-target="{{ spam_count }}">0</span> Spam Detected Today
+        </div>
+      </div>
+
+      <a href="{{ url_for('dataset') }}" style="display:block;margin-top:15px;color:#0ff;text-decoration:none;">
+        <i class="fas fa-table"></i> View Full Dataset Predictions
+      </a>
     </div>
   </section>
 
   <!-- About Section -->
   <section id="about">
     <div class="container">
-      <h2><i data-lucide="info"></i> About Spam Detector</h2>
-      <p>This Spam Detector project is built using Python, Flask, and Machine Learning.</p>
-      <p>It uses a Naive Bayes classifier trained on SMS Spam dataset to detect spam messages.</p>
-      <p>Created by <b>Subh</b> 💻</p>
+      <h2><i class="fas fa-info-circle"></i> About Spam Detector</h2>
+      <p>
+        Spam Detection is the process of identifying unwanted, unsolicited, and often harmful messages such as 
+        advertisements, fraud attempts, or phishing links. These spam messages are a major issue in communication systems.
+      </p>
+      <p>
+        Our Spam Detector uses <b>Natural Language Processing (NLP)</b> techniques and a <b>Naive Bayes Classifier</b>
+        trained on the <a href="https://www.kaggle.com/uciml/sms-spam-collection-dataset" target="_blank" style="color:#0ff;">
+        SMS Spam Dataset</a>. It automatically learns word patterns and probabilities to classify a message as
+        <span class="ham">Ham (Safe)</span> or <span class="spam">Spam</span>.
+      </p>
+      <p>
+        Accuracy of this model is around <b>94%</b>, making it reliable for real-world usage in filtering SMS, Emails, and Chat applications.
+      </p>
+      <div class="features">
+        <div><i class="fas fa-check-circle"></i> Trained on SMS Spam dataset</div>
+        <div><i class="fas fa-bolt"></i> Fast & Accurate Predictions</div>
+        <div><i class="fas fa-lock"></i> Helps prevent phishing attacks</div>
+        <div><i class="fas fa-mobile-alt"></i> Works across devices (Responsive UI)</div>
+        <div><i class="fas fa-database"></i> Dataset view with full predictions</div>
+      </div>
+      <p style="margin-top:15px;">Created by <b>Niraj Kumar</b></p>
     </div>
   </section>
 
   <!-- Contact Section -->
   <section id="contact">
-  <div class="container">
-    <h2><i data-lucide="mail"></i> Contact Us</h2>
-    <form method="POST" action="{{ url_for('contact') }}">
-      <input type="text" name="name" placeholder="Your Name" required><br>
-      <input type="email" name="email" placeholder="Your Email" required><br>
-      <textarea name="message" rows="4" placeholder="Your Message" required></textarea><br>
-      <button type="submit">Send</button>
-    </form>
-  </div>
-</section>
+    <div class="container">
+      <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+      <form method="POST" action="{{ url_for('contact') }}">
+        <input type="text" name="name" placeholder="Your Name" required><br>
+        <input type="email" name="email" placeholder="Your Email" required><br>
+        <textarea name="message" rows="4" placeholder="Your Message" required></textarea><br>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Spam Detector | Built with Flask & Machine Learning</p>
+  </footer>
 
   <script>
-    lucide.createIcons();
     function toggleMenu() { document.getElementById("menu").classList.toggle("show"); }
+
+    // Animated Counter
+    const counter = document.getElementById("spamCount");
+    const target = +counter.getAttribute("data-target");
+    let count = 0;
+    const updateCounter = () => {
+      if (count < target) {
+        count++;
+        counter.innerText = count;
+        setTimeout(updateCounter, 30);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    updateCounter();
   </script>
 </body>
 </html>
